@@ -1,22 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
+
+const POKEMON_API_URL = "https://pokeapi.co/api/v2/pokemon";
+
+const fetchPokemonDetails = async (url) => {
+  const response = await fetch(url);
+  return await response.json();
+};
 
 function App() {
+  const [pokemonList, setPokemonList] = useState([]);
+
+  useEffect(() => {
+    const fetchPokemons = async () => {
+      const response = await fetch(`${POKEMON_API_URL}?limit=100`);
+      const body = await response.json();
+
+      const pokemonPromises = body.results.map((pokemon) =>
+        fetchPokemonDetails(pokemon.url)
+      );
+
+      const pokemonDetails = await Promise.all(pokemonPromises);
+
+      // Sort Pokemon by height
+      const sortedPokemon = pokemonDetails.sort((a, b) => a.height - b.height);
+
+      setPokemonList(sortedPokemon);
+    };
+
+    fetchPokemons();
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Pokemon useEffect</h1>
+        <ul>
+          {pokemonList.map((pokemon) => (
+            <li key={pokemon.name}>
+              {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}{" "}
+              (Height: {pokemon.height})
+            </li>
+          ))}
+        </ul>
       </header>
     </div>
   );
