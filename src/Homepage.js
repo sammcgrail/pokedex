@@ -10,17 +10,13 @@ function HomePage({ pokemonList }) {
   useEffect(() => {
     let sortedList = [...pokemonList].sort((a, b) => {
       if (sortingKey === "name") {
-        if (ascending) {
-          return a[sortingKey].localeCompare(b[sortingKey]);
-        } else {
-          return b[sortingKey].localeCompare(a[sortingKey]);
-        }
+        return ascending
+          ? a[sortingKey].localeCompare(b[sortingKey])
+          : b[sortingKey].localeCompare(a[sortingKey]);
       } else {
-        if (ascending) {
-          return a[sortingKey] - b[sortingKey];
-        } else {
-          return b[sortingKey] - a[sortingKey];
-        }
+        return ascending
+          ? a[sortingKey] - b[sortingKey]
+          : b[sortingKey] - a[sortingKey];
       }
     });
     setSortedPokemonList(sortedList);
@@ -50,7 +46,6 @@ function HomePage({ pokemonList }) {
                 <td>
                   <Link to={`/pokemon/${pokemon.id}`}>{pokemon.name}</Link>
                 </td>
-
                 <td>{pokemon.height / 10} m</td>
                 <td>{pokemon.weight / 10} kg</td>
               </tr>
