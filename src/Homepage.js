@@ -9,10 +9,18 @@ function HomePage({ pokemonList }) {
 
   useEffect(() => {
     let sortedList = [...pokemonList].sort((a, b) => {
-      if (ascending) {
-        return a[sortingKey] - b[sortingKey];
+      if (sortingKey === "name") {
+        if (ascending) {
+          return a[sortingKey].localeCompare(b[sortingKey]);
+        } else {
+          return b[sortingKey].localeCompare(a[sortingKey]);
+        }
       } else {
-        return b[sortingKey] - a[sortingKey];
+        if (ascending) {
+          return a[sortingKey] - b[sortingKey];
+        } else {
+          return b[sortingKey] - a[sortingKey];
+        }
       }
     });
     setSortedPokemonList(sortedList);
