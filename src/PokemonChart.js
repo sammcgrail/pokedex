@@ -21,22 +21,39 @@ function PokemonChart({ sortedPokemonList }) {
       },
     ],
   };
-
-  return (
-    <BarChartComponent
-      data={chartData}
-      options={{
-        indexAxis: "y",
-        scales: {
-          x: {
-            type: "linear",
-            position: "bottom",
-            beginAtZero: true,
-          },
+  const chartOptions = {
+    indexAxis: "y",
+    scales: {
+      x: {
+        type: "linear",
+        position: "bottom",
+        beginAtZero: true,
+        grid: {
+          color: "rgba(255, 255, 255, 0.1)", // light grid lines
         },
-      }}
-    />
-  );
+        ticks: {
+          color: "#FFF", // white font color
+        },
+      },
+      y: {
+        grid: {
+          color: "rgba(255, 255, 255, 0.1)",
+        },
+        ticks: {
+          color: "#FFF",
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        labels: {
+          color: "#FFF", // white font color for legend
+        },
+      },
+    },
+  };
+
+  return <BarChartComponent data={chartData} options={chartOptions} />;
 }
 
 export default PokemonChart;

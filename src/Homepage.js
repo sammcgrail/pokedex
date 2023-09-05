@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PokemonChart from "./PokemonChart";
+import { Link } from "react-router-dom";
 
 function HomePage({ pokemonList }) {
   const [sortedPokemonList, setSortedPokemonList] = useState(pokemonList);
@@ -23,28 +24,35 @@ function HomePage({ pokemonList }) {
   };
 
   return (
-    <div>
-      <table>
-        <thead>
-          <tr>
-            <th onClick={() => handleSort("id")}>ID</th>
-            <th onClick={() => handleSort("name")}>Name</th>
-            <th onClick={() => handleSort("height")}>Height</th>
-            <th onClick={() => handleSort("weight")}>Weight</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedPokemonList.map((pokemon) => (
-            <tr key={pokemon.id}>
-              <td>{pokemon.id}</td>
-              <td>{pokemon.name}</td>
-              <td>{pokemon.height / 10} m</td>
-              <td>{pokemon.weight / 10} kg</td>
+    <div className="content-container">
+      <div className="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th onClick={() => handleSort("id")}>ID</th>
+              <th onClick={() => handleSort("name")}>Name</th>
+              <th onClick={() => handleSort("height")}>Height</th>
+              <th onClick={() => handleSort("weight")}>Weight</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
-      <PokemonChart sortedPokemonList={sortedPokemonList} />
+          </thead>
+          <tbody>
+            {sortedPokemonList.map((pokemon) => (
+              <tr key={pokemon.id}>
+                <td>{pokemon.id}</td>
+                <td>
+                  <Link to={`/pokemon/${pokemon.id}`}>{pokemon.name}</Link>
+                </td>
+
+                <td>{pokemon.height / 10} m</td>
+                <td>{pokemon.weight / 10} kg</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="chart-container">
+        <PokemonChart sortedPokemonList={sortedPokemonList} />
+      </div>
     </div>
   );
 }
