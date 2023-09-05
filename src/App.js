@@ -16,7 +16,7 @@ function App() {
 
   useEffect(() => {
     const fetchPokemons = async () => {
-      const response = await fetch(`${POKEMON_API_URL}?limit=150`);
+      const response = await fetch(`${POKEMON_API_URL}?limit=151`);
       const body = await response.json();
 
       const pokemonPromises = body.results.map((pokemon) =>
@@ -48,11 +48,20 @@ function App() {
 }
 
 function HomePage({ pokemonList }) {
-  const [sortField, setSortField] = useState(null);
+  const [sortField, setSortField] = useState("id");
   const [sortOrder, setSortOrder] = useState("asc");
 
   const sortedPokemonList = [...pokemonList].sort((a, b) => {
     if (!sortField) return 0;
+
+    // Special handling for types since it's an array
+    if (sortField === "types") {
+      const aType = a.types[0].type.name;
+      const bType = b.types[0].type.name;
+      return sortOrder === "asc"
+        ? aType.localeCompare(bType)
+        : bType.localeCompare(aType);
+    }
 
     if (sortOrder === "asc") {
       return a[sortField] > b[sortField] ? 1 : -1;
@@ -77,6 +86,8 @@ function HomePage({ pokemonList }) {
           <th onClick={() => handleSort("id")}>#</th>
           <th onClick={() => handleSort("name")}>Name</th>
           <th onClick={() => handleSort("height")}>Height (m)</th>
+          <th onClick={() => handleSort("weight")}>Weight (kg)</th>
+          <th onClick={() => handleSort("types")}>Type</th>
         </tr>
       </thead>
       <tbody>
@@ -89,6 +100,8 @@ function HomePage({ pokemonList }) {
               </Link>
             </td>
             <td>{pokemon.height / 10}</td>
+            <td>{pokemon.weight / 10}</td>
+            <td>{pokemon.types.map((type) => type.type.name).join(", ")}</td>
           </tr>
         ))}
       </tbody>
