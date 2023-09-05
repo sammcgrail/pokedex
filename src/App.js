@@ -3,10 +3,7 @@ import "./App.css";
 import Header from "./Header";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PokemonDetails from "./Pokemondetails";
-import { Chart, BarElement, CategoryScale, LinearScale } from "chart.js";
 import HomePage from "./Homepage.js";
-
-Chart.register(BarElement, CategoryScale, LinearScale);
 
 export const POKEMON_API_URL = "https://pokeapi.co/api/v2/pokemon";
 
