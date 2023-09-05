@@ -78,8 +78,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  width: 100%;
-  overflow-x: auto;
+  width: 90%;
 }
 
 .table-container {
