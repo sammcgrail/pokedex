@@ -105,8 +105,8 @@ a:hover {
 }
 
 .pokemon-sprite {
-  width: 200px; /* Adjust as necessary */
-  height: 200px; /* Adjust as necessary */
+  width: 300px;
+  height: 300px;
 }
 
 .pokemon-details-table {
