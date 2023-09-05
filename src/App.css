@@ -41,3 +41,41 @@
   list-style-type: none;
   padding-left: 0; /* Optional: remove default padding */
 }
+
+.pokemon-list-item {
+  margin-bottom: 0.5em; /* Adjust this value as needed for double spacing */
+}
+
+body {
+  background-color: #2a2a2a;
+  color: #e5e5e5;
+  font-family: "Roboto", sans-serif;
+}
+
+a {
+  color: white;
+  text-decoration: none; /* Optional: This removes the underline from links */
+}
+
+a:hover {
+  text-decoration: underline; /* Optional: This will underline the link when you hover over it */
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; /* takes the full width of the container */
+}
+
+.pokeball-icon {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
