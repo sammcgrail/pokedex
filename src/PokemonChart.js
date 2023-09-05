@@ -22,6 +22,7 @@ function getCombinedChartData(sortedPokemonList) {
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
+        yAxisID: "y-axis-height",
       },
       {
         label: "Weight (kg)",
@@ -29,6 +30,7 @@ function getCombinedChartData(sortedPokemonList) {
         backgroundColor: "rgba(153, 102, 255, 0.6)",
         borderColor: "rgba(153, 102, 255, 1)",
         borderWidth: 1,
+        yAxisID: "y-axis-weight",
       },
     ],
   };
@@ -60,14 +62,14 @@ function PokemonChart({ sortedPokemonList }) {
     "weight"
   );
 
-  const binnedChartData = (data, label, bins) => ({
+  const binnedChartData = (data, label, bins, bgColor, borderColor) => ({
     labels: bins.map((bin) => bin.label),
     datasets: [
       {
         label: `Number of Pokémon (${label})`,
         data: data,
-        backgroundColor: "rgba(255, 159, 64, 0.6)",
-        borderColor: "rgba(255, 159, 64, 1)",
+        backgroundColor: bgColor,
+        borderColor: borderColor,
         borderWidth: 1,
       },
     ],
@@ -82,14 +84,29 @@ function PokemonChart({ sortedPokemonList }) {
           color: "#FFF",
         },
       },
-      y: {
-        beginAtZero: true,
-        title: {
-          display: true,
-          text: "Value",
-          color: "#FFF",
+      yAxes: [
+        {
+          id: "y-axis-height",
+          position: "left",
+          title: {
+            display: true,
+            text: "Height (m)",
+            color: "#FFF",
+          },
         },
-      },
+        {
+          id: "y-axis-weight",
+          position: "right",
+          title: {
+            display: true,
+            text: "Weight (kg)",
+            color: "#FFF",
+          },
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
+      ],
       plugins: {
         legend: {
           labels: {
@@ -109,12 +126,24 @@ function PokemonChart({ sortedPokemonList }) {
       />
       <h3>Height Binned Chart</h3>
       <BarChartComponent
-        data={binnedChartData(heightBinnedData, "Height", heightBins)}
+        data={binnedChartData(
+          heightBinnedData,
+          "Height",
+          heightBins,
+          "rgba(75, 192, 192, 0.6)",
+          "rgba(75, 192, 192, 1)"
+        )}
         options={chartOptions}
       />
       <h3>Weight Binned Chart</h3>
       <BarChartComponent
-        data={binnedChartData(weightBinnedData, "Weight", weightBins)}
+        data={binnedChartData(
+          weightBinnedData,
+          "Weight",
+          weightBins,
+          "rgba(153, 102, 255, 0.6)",
+          "rgba(153, 102, 255, 1)"
+        )}
         options={chartOptions}
       />
     </div>
