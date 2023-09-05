@@ -83,6 +83,15 @@ function PokemonChart({ sortedPokemonList }) {
           text: "Pokémon Name",
           color: "#FFF",
         },
+        ticks: {
+          font: {
+            size: 4, // Adjust this value to fit the labels better
+          },
+          autoSkip: false, // This will show all labels, adjust font size to make them fit
+          autoSkipPadding: 10, // Adjust the padding as needed
+          maxRotation: 90,
+          minRotation: 90,
+        },
       },
       yAxes: [
         {
@@ -92,6 +101,11 @@ function PokemonChart({ sortedPokemonList }) {
             display: true,
             text: "Height (m)",
             color: "#FFF",
+          },
+          ticks: {
+            callback: function (value) {
+              return `${value} m`; // Adds 'm' as the unit to each tick
+            },
           },
         },
         {
@@ -105,13 +119,52 @@ function PokemonChart({ sortedPokemonList }) {
           grid: {
             drawOnChartArea: false,
           },
+          ticks: {
+            callback: function (value) {
+              return `${value} kg`; // Adds 'kg' as the unit to each tick
+            },
+          },
         },
       ],
+
       plugins: {
         legend: {
           labels: {
             color: "#FFF",
           },
+        },
+      },
+    },
+  };
+
+  const binnedChartOptions = {
+    scales: {
+      x: {
+        title: {
+          display: true,
+          text: "Bins",
+          color: "#FFF",
+        },
+        ticks: {
+          autoSkip: true,
+          autoSkipPadding: 10,
+          maxRotation: 90,
+          minRotation: 90,
+        },
+      },
+      y: {
+        title: {
+          display: true,
+          text: "Number of Pokémon",
+          color: "#FFF",
+        },
+        beginAtZero: true,
+      },
+    },
+    plugins: {
+      legend: {
+        labels: {
+          color: "#FFF",
         },
       },
     },
@@ -133,7 +186,7 @@ function PokemonChart({ sortedPokemonList }) {
           "rgba(75, 192, 192, 0.6)",
           "rgba(75, 192, 192, 1)"
         )}
-        options={chartOptions}
+        options={binnedChartOptions}
       />
       <h3>Weight Binned Chart</h3>
       <BarChartComponent
@@ -144,7 +197,7 @@ function PokemonChart({ sortedPokemonList }) {
           "rgba(153, 102, 255, 0.6)",
           "rgba(153, 102, 255, 1)"
         )}
-        options={chartOptions}
+        options={binnedChartOptions}
       />
     </div>
   );
