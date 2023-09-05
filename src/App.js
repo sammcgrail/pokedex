@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
+import Header from "./Header";
+import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
+import PokemonDetails from "./Pokemondetails";
 
 const POKEMON_API_URL = "https://pokeapi.co/api/v2/pokemon";
 
@@ -13,7 +16,7 @@ function App() {
 
   useEffect(() => {
     const fetchPokemons = async () => {
-      const response = await fetch(`${POKEMON_API_URL}?limit=100`);
+      const response = await fetch(`${POKEMON_API_URL}?limit=10`);
       const body = await response.json();
 
       const pokemonPromises = body.results.map((pokemon) =>
@@ -32,19 +35,30 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <h1>Pokemon useEffect</h1>
-        <ul>
-          {pokemonList.map((pokemon) => (
-            <li key={pokemon.name}>
-              {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}{" "}
-              (Height: {pokemon.height})
-            </li>
-          ))}
-        </ul>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Header />
+        <Routes>
+          <Route path="/" element={<HomePage pokemonList={pokemonList} />} />
+          <Route path="/pokemon/:pokemonURL" element={<PokemonDetails />} />
+        </Routes>
+      </div>
+    </Router>
+  );
+}
+
+function HomePage({ pokemonList }) {
+  return (
+    <ul className="no-bullets">
+      {pokemonList.map((pokemon) => (
+        <li key={pokemon.name}>
+          <Link to={`/pokemon/${btoa(pokemon.url)}`}>
+            ✨ {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} ✨
+            (Height: {pokemon.height})
+          </Link>
+        </li>
+      ))}
+    </ul>
   );
 }
 
