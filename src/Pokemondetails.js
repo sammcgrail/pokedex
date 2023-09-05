@@ -40,8 +40,58 @@ function PokemonDetails() {
     <div>
       <img src={pokemon.sprites.front_default} alt={pokemon.name} />
       <h2>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h2>
-      <p>Height: {pokemon.height / 10} meters</p>
-      <p>Weight: {pokemon.weight / 10} kg</p>
+
+      <table>
+        <tbody>
+          <tr>
+            <th>Height</th>
+            <td>{pokemon.height / 10} meters</td>
+          </tr>
+          <tr>
+            <th>Weight</th>
+            <td>{pokemon.weight / 10} kg</td>
+          </tr>
+          <tr>
+            <th>Type</th>
+            <td>{pokemon.types.map((type) => type.type.name).join(", ")}</td>
+          </tr>
+          <tr>
+            <th>Abilities</th>
+            <td>
+              {pokemon.abilities
+                .map((ability) => ability.ability.name)
+                .join(", ")}
+            </td>
+          </tr>
+          <tr>
+            <th>Stats</th>
+            <td>
+              <ul className="no-bullets">
+                {pokemon.stats.map((stat, index) => (
+                  <li key={index}>
+                    {stat.stat.name}: {stat.base_stat}
+                  </li>
+                ))}
+              </ul>
+            </td>
+          </tr>
+          <tr>
+            <th>Moves</th>
+            <td>
+              <ul className="no-bullets">
+                {pokemon.moves.slice(0, 10).map(
+                  (
+                    move,
+                    index // Limit to first 10 moves for brevity
+                  ) => (
+                    <li key={index}>{move.move.name}</li>
+                  )
+                )}
+              </ul>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   );
 }
