@@ -16,7 +16,7 @@ function App() {
 
   useEffect(() => {
     const fetchPokemons = async () => {
-      const response = await fetch(`${POKEMON_API_URL}?limit=50`);
+      const response = await fetch(`${POKEMON_API_URL}?limit=150`);
       const body = await response.json();
 
       const pokemonPromises = body.results.map((pokemon) =>
@@ -51,10 +51,10 @@ function HomePage({ pokemonList }) {
   return (
     <ul className="no-bullets">
       {pokemonList.map((pokemon) => (
-        <li key={pokemon.name}>
+        <li key={pokemon.name} className="pokemon-list-item">
           <Link to={`/pokemon/${pokemon.id}`}>
-            {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
-            (Height: {pokemon.height})
+            {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}{" "}
+            (Height: {pokemon.height / 10} meters)
           </Link>
         </li>
       ))}
