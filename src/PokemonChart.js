@@ -1,8 +1,19 @@
 import React from "react";
 import { Bar as BarChartComponent } from "react-chartjs-2";
 
-function PokemonChart({ sortedPokemonList }) {
-  const chartData = {
+function createBinnedData(sortedPokemonList, bins, key) {
+  return bins.map((bin) => {
+    const count = sortedPokemonList.filter((pokemon) => {
+      const value =
+        key === "height" ? pokemon.height / 10 : pokemon.weight / 10;
+      return value >= bin.min && value < bin.max;
+    }).length;
+    return count;
+  });
+}
+
+function getCombinedChartData(sortedPokemonList) {
+  return {
     labels: sortedPokemonList.map((pokemon) => pokemon.name),
     datasets: [
       {
@@ -21,39 +32,93 @@ function PokemonChart({ sortedPokemonList }) {
       },
     ],
   };
+}
+
+function PokemonChart({ sortedPokemonList }) {
+  const heightBins = [
+    { label: "0-0.5m", min: 0, max: 0.5 },
+    { label: "0.5-1m", min: 0.5, max: 1 },
+    { label: "1-1.5m", min: 1, max: 1.5 },
+    { label: "1.5-2m", min: 1.5, max: 2 },
+    { label: "2m+", min: 2, max: Infinity },
+  ];
+  const weightBins = [
+    { label: "0-10kg", min: 0, max: 10 },
+    { label: "10-50kg", min: 10, max: 50 },
+    { label: "50-100kg", min: 50, max: 100 },
+    { label: "100kg+", min: 100, max: Infinity },
+  ];
+
+  const heightBinnedData = createBinnedData(
+    sortedPokemonList,
+    heightBins,
+    "height"
+  );
+  const weightBinnedData = createBinnedData(
+    sortedPokemonList,
+    weightBins,
+    "weight"
+  );
+
+  const binnedChartData = (data, label, bins) => ({
+    labels: bins.map((bin) => bin.label),
+    datasets: [
+      {
+        label: `Number of Pokémon (${label})`,
+        data: data,
+        backgroundColor: "rgba(255, 159, 64, 0.6)",
+        borderColor: "rgba(255, 159, 64, 1)",
+        borderWidth: 1,
+      },
+    ],
+  });
+
   const chartOptions = {
-    indexAxis: "y",
     scales: {
       x: {
-        type: "linear",
-        position: "bottom",
-        beginAtZero: true,
-        grid: {
-          color: "rgba(255, 255, 255, 0.1)", // light grid lines
-        },
-        ticks: {
-          color: "#FFF", // white font color
-        },
-      },
-      y: {
-        grid: {
-          color: "rgba(255, 255, 255, 0.1)",
-        },
-        ticks: {
+        title: {
+          display: true,
+          text: "Pokémon Name",
           color: "#FFF",
         },
       },
-    },
-    plugins: {
-      legend: {
-        labels: {
-          color: "#FFF", // white font color for legend
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "Value",
+          color: "#FFF",
+        },
+      },
+      plugins: {
+        legend: {
+          labels: {
+            color: "#FFF",
+          },
         },
       },
     },
   };
 
-  return <BarChartComponent data={chartData} options={chartOptions} />;
+  return (
+    <div>
+      <h3>Combined Chart</h3>
+      <BarChartComponent
+        data={getCombinedChartData(sortedPokemonList)}
+        options={chartOptions}
+      />
+      <h3>Height Binned Chart</h3>
+      <BarChartComponent
+        data={binnedChartData(heightBinnedData, "Height", heightBins)}
+        options={chartOptions}
+      />
+      <h3>Weight Binned Chart</h3>
+      <BarChartComponent
+        data={binnedChartData(weightBinnedData, "Weight", weightBins)}
+        options={chartOptions}
+      />
+    </div>
+  );
 }
 
 export default PokemonChart;
