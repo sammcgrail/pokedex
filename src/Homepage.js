@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PokemonChart from "./PokemonChart";
+import PokemonScatterChart from "./PokemonScatterChart";
 import { Link } from "react-router-dom";
 
 function HomePage({ pokemonList }) {
@@ -55,6 +56,7 @@ function HomePage({ pokemonList }) {
       </div>
       <div className="chart-container">
         <PokemonChart sortedPokemonList={sortedPokemonList} />
+        <PokemonScatterChart sortedPokemonList={sortedPokemonList} />
       </div>
     </div>
   );
