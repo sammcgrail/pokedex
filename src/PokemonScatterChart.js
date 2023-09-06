@@ -23,45 +23,57 @@ function getColorForType(type) {
     steel: "#B8B8D0",
   };
 
-  return colors[type.toLowerCase()] || "#000000"; // Default black color if type is not found
+  return colors[type.toLowerCase()] || "#000000";
 }
 
 function PokemonScatterChart({ sortedPokemonList }) {
   const data = {
-    datasets: [
-      {
-        label: "Height vs Weight",
-        data: sortedPokemonList.map((pokemon) => ({
+    datasets: sortedPokemonList.map((pokemon) => ({
+      label: pokemon.name,
+      data: [
+        {
           x: pokemon.height / 10,
           y: pokemon.weight / 10,
-        })),
-        backgroundColor: sortedPokemonList.map((pokemon) =>
-          getColorForType(pokemon.types[0].type.name)
-        ),
-        pointRadius: 5,
-      },
-    ],
+        },
+      ],
+      backgroundColor: getColorForType(pokemon.types[0].type.name),
+      pointRadius: 5,
+    })),
   };
 
   const options = {
     scales: {
-      x: {
-        title: {
-          display: true,
-          text: "Height (m)",
+      xAxes: [
+        {
+          scaleLabel: {
+            display: true,
+            labelString: "Height (m)",
+          },
         },
-      },
-      y: {
-        title: {
-          display: true,
-          text: "Weight (kg)",
+      ],
+      yAxes: [
+        {
+          scaleLabel: {
+            display: true,
+            labelString: "Weight (kg)",
+          },
+        },
+      ],
+    },
+    tooltips: {
+      callbacks: {
+        title: (tooltipItems, data) => {
+          return data.datasets[tooltipItems[0].datasetIndex].label;
+        },
+        label: (tooltipItem, data) => {
+          const type =
+            sortedPokemonList[tooltipItem.datasetIndex].types[0].type.name;
+          return `Type: ${type.charAt(0).toUpperCase() + type.slice(1)}`;
         },
       },
     },
-    plugins: {
-      legend: {
-        display: false,
-      },
+    legend: {
+      display: false,
     },
   };
 
