@@ -4,6 +4,7 @@ import Header from "./Header";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PokemonDetails from "./Pokemondetails";
 import HomePage from "./Homepage.js";
+import ItemList from "./ItemList";
 
 export const POKEMON_API_URL = "https://pokeapi.co/api/v2/pokemon";
 
@@ -36,6 +37,7 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage pokemonList={pokemonList} />} />
           <Route path="/pokemon/:pokemonId" element={<PokemonDetails />} />
+          <Route path="/items" element={<ItemList />} />
         </Routes>
       </div>
     </Router>
