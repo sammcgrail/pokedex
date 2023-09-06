@@ -63,7 +63,7 @@ function getColorByType(type) {
 function getScatterPlotData(sortedPokemonList) {
   return {
     datasets: sortedPokemonList.map((pokemon) => ({
-      label: pokemon.name,
+      label: pokemon.types[0].type.name, // Use the type name instead of Pokémon name
       data: [{ x: pokemon.height / 10, y: pokemon.weight / 10 }],
       backgroundColor: getColorByType(pokemon.types[0].type.name),
       pointRadius: 5,
