@@ -1,12 +1,13 @@
 # pokedex
 <img width="200" alt="Screenshot 2023-09-05 at 11 17 06 PM" src="https://github.com/sammcgrail/pokedex/assets/6109568/5c3ff94d-6586-4e85-801c-b163fbec9170">
 
-
+*********************
 Quick example app
 
 install project with `yarn`
 
 run server with `yarn start`
+*********************
 
 ## Click the table headers to sort the list. 
 Combined chart will sort accordingly. 
@@ -20,11 +21,11 @@ URL structure is based on ID. /pokemon/id -> /pokemon/4
 
 *********************
 
-## Scatter chart with log scale / clickable legend: 
+## Scatter plot with log scale / clickable legend: 
 
 <img width="1713" alt="Screenshot 2023-09-05 at 11 43 26 PM" src="https://github.com/sammcgrail/pokedex/assets/6109568/6d93cf3f-403c-4988-a56f-610e14582521">
 
-
+*********************
 
 https://github.com/sammcgrail/pokedex/assets/6109568/b5dea135-c530-4ed1-be85-06e322c6e80d
 
