@@ -28,6 +28,7 @@ function getColorForType(type) {
 
 function PokemonScatterChart({ sortedPokemonList }) {
   const [hiddenTypes, setHiddenTypes] = useState([]);
+  const [chartType, setChartType] = useState("logarithmic");
 
   const toggleTypeVisibility = (type) => {
     if (hiddenTypes.includes(type)) {
@@ -37,22 +38,36 @@ function PokemonScatterChart({ sortedPokemonList }) {
     }
   };
 
+  const deselectAllTypes = () => {
+    setHiddenTypes(Object.keys(colors));
+  };
+
+  const selectAllTypes = () => {
+    setHiddenTypes([]);
+  };
+
+  const toggleChartType = () => {
+    setChartType(chartType === "logarithmic" ? "linear" : "logarithmic");
+  };
+
   const isVisible = (pokemonType) => !hiddenTypes.includes(pokemonType);
 
+  const visiblePokemon = sortedPokemonList.filter((pokemon) =>
+    isVisible(pokemon.types[0].type.name)
+  );
+
   const data = {
-    labels: sortedPokemonList.map((pokemon) => pokemon.name),
+    labels: visiblePokemon.map((pokemon) => pokemon.name),
     datasets: [
       {
         label: "Pokemons",
-        data: sortedPokemonList
-          .filter((pokemon) => isVisible(pokemon.types[0].type.name))
-          .map((pokemon) => ({
-            x: pokemon.height / 10,
-            y: pokemon.weight / 10,
-          })),
-        backgroundColor: sortedPokemonList
-          .filter((pokemon) => isVisible(pokemon.types[0].type.name))
-          .map((pokemon) => getColorForType(pokemon.types[0].type.name)),
+        data: visiblePokemon.map((pokemon) => ({
+          x: pokemon.height / 10,
+          y: pokemon.weight / 10,
+        })),
+        backgroundColor: visiblePokemon.map((pokemon) =>
+          getColorForType(pokemon.types[0].type.name)
+        ),
         pointRadius: 5,
       },
     ],
@@ -62,26 +77,28 @@ function PokemonScatterChart({ sortedPokemonList }) {
     scales: {
       xAxes: [
         {
-          type: "logarithmic",
+          type: chartType,
           position: "bottom",
           ticks: {
             callback: (value) => Number(value.toString()),
           },
           scaleLabel: {
             display: true,
-            labelString: "Height (m)",
+            labelString:
+              chartType === "logarithmic" ? "Height log(m)" : "Height (m)",
           },
         },
       ],
       yAxes: [
         {
-          type: "logarithmic",
+          type: chartType,
           ticks: {
             callback: (value) => Number(value.toString()),
           },
           scaleLabel: {
             display: true,
-            labelString: "Weight (kg)",
+            labelString:
+              chartType === "logarithmic" ? "Weight log(kg)" : "Weight (kg)",
           },
         },
       ],
@@ -90,8 +107,9 @@ function PokemonScatterChart({ sortedPokemonList }) {
       callbacks: {
         title: (tooltipItems, data) => data.labels[tooltipItems[0].index],
         label: (tooltipItem) => {
-          const index = tooltipItem.index;
-          const type = sortedPokemonList[index].types[0].type.name;
+          const name = data.labels[tooltipItem.index];
+          const pokemon = sortedPokemonList.find((p) => p.name === name);
+          const type = pokemon.types[0].type.name;
           return `Type: ${type.charAt(0).toUpperCase() + type.slice(1)}`;
         },
       },
@@ -140,7 +158,15 @@ function PokemonScatterChart({ sortedPokemonList }) {
                   opacity: hiddenTypes.includes(type) ? 0.3 : 1,
                 }}
               ></div>
-              {type.charAt(0).toUpperCase() + type.slice(1)}
+              <span
+                style={{
+                  textDecoration: hiddenTypes.includes(type)
+                    ? "line-through"
+                    : "none",
+                }}
+              >
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </span>
             </div>
           ))}
         </div>
@@ -165,9 +191,37 @@ function PokemonScatterChart({ sortedPokemonList }) {
                   opacity: hiddenTypes.includes(type) ? 0.3 : 1,
                 }}
               ></div>
-              {type.charAt(0).toUpperCase() + type.slice(1)}
+              <span
+                style={{
+                  textDecoration: hiddenTypes.includes(type)
+                    ? "line-through"
+                    : "none",
+                }}
+              >
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </span>
             </div>
           ))}
+        </div>
+        <div style={{ display: "flex", justifyContent: "center", gap: "10px" }}>
+          <button
+            onClick={selectAllTypes}
+            style={{ width: "200px", padding: "5px" }}
+          >
+            Select All
+          </button>
+          <button
+            onClick={deselectAllTypes}
+            style={{ width: "200px", padding: "5px" }}
+          >
+            Deselect All
+          </button>
+          <button
+            onClick={toggleChartType}
+            style={{ width: "200px", padding: "5px" }}
+          >
+            Switch to {chartType === "logarithmic" ? "Linear" : "Logarithmic"}
+          </button>
         </div>
       </div>
     </div>
