@@ -2,35 +2,34 @@ import React from "react";
 import { Bar as BarChartComponent, Scatter } from "react-chartjs-2";
 
 function createBinnedData(sortedPokemonList, bins, key) {
-  return bins.map((bin) => {
-    const count = sortedPokemonList.filter((pokemon) => {
-      const value =
-        key === "height" ? pokemon.height / 10 : pokemon.weight / 10;
-      return value >= bin.min && value < bin.max;
-    }).length;
-    return count;
-  });
+  const binnedData = bins.map((bin) => ({
+    label: bin.label,
+    count: sortedPokemonList.filter(
+      (pokemon) => pokemon[key] / 10 >= bin.min && pokemon[key] / 10 < bin.max
+    ).length,
+  }));
+  return binnedData;
 }
 
 function getCombinedChartData(sortedPokemonList) {
+  const heightData = sortedPokemonList.map((pokemon) => pokemon.height / 10);
+  const weightData = sortedPokemonList.map((pokemon) => pokemon.weight / 10);
   return {
     labels: sortedPokemonList.map((pokemon) => pokemon.name),
     datasets: [
       {
         label: "Height (m)",
-        data: sortedPokemonList.map((pokemon) => pokemon.height / 10),
+        data: heightData,
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
-        yAxisID: "y-axis-height",
       },
       {
         label: "Weight (kg)",
-        data: sortedPokemonList.map((pokemon) => pokemon.weight / 10),
+        data: weightData,
         backgroundColor: "rgba(153, 102, 255, 0.6)",
         borderColor: "rgba(153, 102, 255, 1)",
         borderWidth: 1,
-        yAxisID: "y-axis-weight",
       },
     ],
   };
@@ -57,19 +56,58 @@ function getColorByType(type) {
     Ghost: "#705898",
     Steel: "#B8B8D0",
   };
-  return colors[type] || "#000000";
+  return colors[type];
 }
 
 function getScatterPlotData(sortedPokemonList) {
+  const groupedByType = {};
+
+  sortedPokemonList.forEach((pokemon) => {
+    const type = pokemon.types[0].type.name;
+    if (!groupedByType[type]) {
+      groupedByType[type] = [];
+    }
+    groupedByType[type].push({
+      x: pokemon.height / 10,
+      y: pokemon.weight / 10,
+    });
+  });
+
   return {
-    datasets: sortedPokemonList.map((pokemon) => ({
-      label: pokemon.types[0].type.name, // Use the type name instead of Pokémon name
-      data: [{ x: pokemon.height / 10, y: pokemon.weight / 10 }],
-      backgroundColor: getColorByType(pokemon.types[0].type.name),
+    datasets: Object.keys(groupedByType).map((type) => ({
+      label: type,
+      data: groupedByType[type],
+      backgroundColor: getColorByType(type),
+      borderColor: getColorByType(type),
       pointRadius: 5,
     })),
   };
 }
+
+const scatterPlotOptions = {
+  scales: {
+    x: {
+      type: "linear",
+      position: "bottom",
+    },
+  },
+  plugins: {
+    legend: {
+      labels: {
+        usePointStyle: true,
+        color: (context) => getColorByType(context.dataset.label),
+      },
+    },
+  },
+};
+
+const binnedChartOptions = {
+  scales: {
+    y: {
+      beginAtZero: true,
+    },
+  },
+};
 
 function PokemonChart({ sortedPokemonList }) {
   const heightBins = [
@@ -97,144 +135,31 @@ function PokemonChart({ sortedPokemonList }) {
     "weight"
   );
 
-  const binnedChartData = (data, label, bins, bgColor, borderColor) => ({
+  const binnedChartData = (
+    data,
+    label,
+    bins,
+    backgroundColor,
+    borderColor
+  ) => ({
     labels: bins.map((bin) => bin.label),
     datasets: [
       {
-        label: `Number of Pokémon (${label})`,
-        data: data,
-        backgroundColor: bgColor,
+        label: label,
+        data: data.map((bin) => bin.count),
+        backgroundColor: backgroundColor,
         borderColor: borderColor,
         borderWidth: 1,
       },
     ],
   });
 
-  const chartOptions = {
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: "Pokémon Name",
-          color: "#FFF",
-        },
-        ticks: {
-          font: {
-            size: 4, // Adjust this value to fit the labels better
-          },
-          autoSkip: false, // This will show all labels, adjust font size to make them fit
-          autoSkipPadding: 10, // Adjust the padding as needed
-          maxRotation: 90,
-          minRotation: 90,
-        },
-      },
-      yAxes: [
-        {
-          id: "y-axis-height",
-          position: "left",
-          title: {
-            display: true,
-            text: "Height (m)",
-            color: "#FFF",
-          },
-          ticks: {
-            callback: function (value) {
-              return `${value} m`; // Adds 'm' as the unit to each tick
-            },
-          },
-        },
-        {
-          id: "y-axis-weight",
-          position: "right",
-          title: {
-            display: true,
-            text: "Weight (kg)",
-            color: "#FFF",
-          },
-          grid: {
-            drawOnChartArea: false,
-          },
-          ticks: {
-            callback: function (value) {
-              return `${value} kg`; // Adds 'kg' as the unit to each tick
-            },
-          },
-        },
-      ],
-
-      plugins: {
-        legend: {
-          labels: {
-            color: "#FFF",
-          },
-        },
-      },
-    },
-  };
-
-  const binnedChartOptions = {
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: "Bins",
-          color: "#FFF",
-        },
-        ticks: {
-          autoSkip: true,
-          autoSkipPadding: 10,
-          maxRotation: 90,
-          minRotation: 90,
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: "Number of Pokémon",
-          color: "#FFF",
-        },
-        beginAtZero: true,
-      },
-    },
-    plugins: {
-      legend: {
-        labels: {
-          color: "#FFF",
-        },
-      },
-    },
-  };
-
-  const scatterPlotOptions = {
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: "Height (m)",
-          color: "#FFF",
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: "Weight (kg)",
-          color: "#FFF",
-        },
-      },
-    },
-    plugins: {
-      legend: {
-        display: false,
-      },
-    },
-  };
-
   return (
     <div>
       <h3>Combined Chart</h3>
       <BarChartComponent
         data={getCombinedChartData(sortedPokemonList)}
-        options={chartOptions}
+        options={scatterPlotOptions}
       />
       <h3>Scatter Plot by Pokémon Type</h3>
       <Scatter
