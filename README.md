@@ -20,6 +20,13 @@ URL structure is based on ID. /pokemon/id -> /pokemon/4
 
 *********************
 
-## WIP - scatter chart with log scale / clickable legend: 
+## Scatter chart with log scale / clickable legend: 
 
-<img width="1657" alt="Screenshot 2023-09-05 at 11 16 48 PM" src="https://github.com/sammcgrail/pokedex/assets/6109568/5aaeb0c2-05a2-4d3b-8228-95ad849fd49d">
+<img width="1713" alt="Screenshot 2023-09-05 at 11 43 26 PM" src="https://github.com/sammcgrail/pokedex/assets/6109568/6d93cf3f-403c-4988-a56f-610e14582521">
+
+
+
+https://github.com/sammcgrail/pokedex/assets/6109568/b5dea135-c530-4ed1-be85-06e322c6e80d
+
+
+
