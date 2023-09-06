@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import PokemonChart from "./PokemonChart";
 import PokemonScatterChart from "./PokemonScatterChart";
+import HeightBinnedChart from "./HeightBinnedChart";
+import WeightBinnedChart from "./WeightBinnedChart";
 import { Link } from "react-router-dom";
 
 function HomePage({ pokemonList }) {
@@ -57,6 +59,8 @@ function HomePage({ pokemonList }) {
       <div className="chart-container">
         <PokemonChart sortedPokemonList={sortedPokemonList} />
         <PokemonScatterChart sortedPokemonList={sortedPokemonList} />
+        <HeightBinnedChart sortedPokemonList={sortedPokemonList} />
+        <WeightBinnedChart sortedPokemonList={sortedPokemonList} />
       </div>
     </div>
   );
