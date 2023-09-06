@@ -78,7 +78,7 @@ a:hover {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  width: 90%;
+  width: 95%;
 }
 
 .table-container {
@@ -109,7 +109,7 @@ a:hover {
 .chart-container {
   flex: 1;
   position: relative;
-  width: 80%;
+  width: 100%;
 }
 
 .pokemon-sprite {
