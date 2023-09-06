@@ -1,13 +1,11 @@
 # pokedex
 <img width="200" alt="Screenshot 2023-09-05 at 11 17 06 PM" src="https://github.com/sammcgrail/pokedex/assets/6109568/5c3ff94d-6586-4e85-801c-b163fbec9170">
 
-*********************
-Quick example app
+## Quick example app
 
 install project with `yarn`
 
 run server with `yarn start`
-*********************
 
 ## Click the table headers to sort the list. 
 Combined chart will sort accordingly. 
